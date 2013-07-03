@@ -1,0 +1,89 @@
+{% extends "silpa.html" %}
+{% block modulescript %}
+<script>
+  $(document).ready(function() {
+  $("form").submit(function(event){
+event.preventDefault();
+  dosort();
+  }
+  );
+  });
+
+  function dosort()
+  {
+ var text= $("textarea[name=input_text]").val();
+  var jsonRequest = {
+  "method" :  "sort.sort",
+  "params" : [text],
+  "id" : ""
+  };
+  $.ajax({
+  type: "POST",
+  contentType: "application/json; charset=utf-8",
+  url: "JSONRPC",
+  data: JSON.stringify(jsonRequest),
+  dataType: "json",
+  beforeSend:function(){
+  $("#progress").html("Please wait...").show();
+  $("#result").hide();
+  $("#error").hide();
+
+  },
+  success: function(msg) {
+  var resultobj =  msg.result;
+  $('#progress').hide();
+  $('#result').html("<table id='sortedtable' class='table table-stripped table-bordered '><tr><th>UCA Result</th><th>Modified UCA Result</th></tr></table>").show();
+  var silparesult = resultobj['SILPA'];
+  var ucaresult = resultobj['UCA'];
+  $.each(silparesult,function(index, item)
+  {
+  $('#sortedtable tr:last').after("<tr><td>" + ucaresult[index] +"</td><td>" + silparesult[index] +"</td></tr>" );
+  });
+  },
+  error: function(msg) {$("#progress").hide();
+  $("#error").html("Something went wrong.....").show()
+  }
+  });
+  }
+
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="well">
+</hr>
+
+<h2>Sort</h2></hr>
+<p><a href="http://unicode.org/reports/tr10/"> Unicode Collation
+Algorithm(UCA)</a>
+based sorting for all languages defined in Unicode.
+The collation weights used in this application is a
+modified version of
+<a href="http://www.unicode.org/Public/UCA/6.0.0/allkeys.txt">
+  Default Unicode Collation Element Table (DUCET)</a>.
+  You can download the modified version from
+  <a href="modules/sort/allkeys-silpa-6.0.0.txt">
+    here (1 MB)</a>. The current version is modified only for
+    Malayalam language. For other languages,it use the
+    default weights defined by Unicode.
+    Malayalam and Tamil sorting is compatible with GNU C library
+    collation definition.
+</p>
+<form>
+  Enter the words to sort in the below textbox. Words will be splitted at 'space'. You can enter the text in any language.
+  Text may contain multiple scripts too.
+  <p align="center">
+    <textarea  name='input_text'class="span12" id='input_text'></textarea></br>
+    <input class="btn btn-primary" type="submit" id="sort" value="Sort"  style="width:10em;"/>
+  </br>
+</p>
+</form>
+<hr/>
+<hr/>
+<div id="progress" class="alert alert-info hide"></div>
+<div id="successmessage" class="alert alert-success hide"></div>
+<div id="errormessage" class="alert alert-error hide"></div>
+</div>
+<div id="result" class="hide"></div>
+
+{% endblock %}
