@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-name = "sort"
+name = "ucasort"
 
 setup(
     name = name,
