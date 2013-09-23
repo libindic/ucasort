@@ -6,7 +6,7 @@ name = "ucasort"
 
 setup(
     name = name,
-    version = "0.1",
+    version = "0.1.1",
     url = "http://silpa.org.in/sort",
     license = "LGPL-3.0",
     description = "Sort words basded on linguistics",
