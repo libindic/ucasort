@@ -60,40 +60,26 @@ $(document).ready(function() {
 {% endblock %}
 
 {% block content %}
-<div class="well">
-</hr>
-
-<h2>Sort</h2></hr>
-<p><a href="http://unicode.org/reports/tr10/"> Unicode Collation
-Algorithm(UCA)</a>
-based sorting for all languages defined in Unicode.
-The collation weights used in this application is a
-modified version of
-<a href="http://www.unicode.org/Public/UCA/6.0.0/allkeys.txt">
-  Default Unicode Collation Element Table (DUCET)</a>.
-  You can download the modified version from
-  <a href="modules/sort/allkeys-silpa-6.0.0.txt">
-    here (1 MB)</a>. The current version is modified only for
-    Malayalam language. For other languages,it use the
-    default weights defined by Unicode.
-    Malayalam and Tamil sorting is compatible with GNU C library
-    collation definition.
-</p>
-<form>
-  Enter the words to sort in the below textbox. Words will be splitted at 'space'. You can enter the text in any language.
-  Text may contain multiple scripts too.
-  <p align="center">
-    <textarea  name='input_text'class="span12" id='input_text'></textarea></br>
-    <input class="btn btn-primary" type="submit" id="sort" value="Sort"  style="width:10em;"/>
-  </br>
-</p>
-</form>
-<hr/>
-<hr/>
-<div id="progress" class="alert alert-info hide"></div>
-<div id="successmessage" class="alert alert-success hide"></div>
-<div id="errormessage" class="alert alert-error hide"></div>
+<div class="page-header">
+    <h1>Sort</h1>
 </div>
+
+<p><a href="http://unicode.org/reports/tr10/"> Unicode Collation Algorithm(UCA)</a>
+based sorting for all languages defined in Unicode. The collation weights used in this application is a modified version of <a href="http://www.unicode.org/Public/UCA/6.0.0/allkeys.txt"> Default Unicode Collation Element Table (DUCET)</a>. You can download the modified version from <a href="modules/sort/allkeys-silpa-6.0.0.txt"> here (1 MB)</a>. The current version is modified only for Malayalam language. For other languages,it use the default weights defined by Unicode. Malayalam and Tamil sorting is compatible with GNU C library collation definition.</p>
+
+<p>Enter the words to sort in the below textbox. Words will be splitted at 'space'. You can enter the text in any language. Text may contain multiple scripts too.</p>
+
+<form class="form-horizontal">
+    <div class="form-group">
+        <textarea name='input_text' id='input_text' class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+        <input class="btn btn-default col-sm-3" type="submit" id="sort" value="Sort"/>
+    </div>
+</form>
+
+<div id="progress" class="alert alert-info silpa-hide"></div>
+<div id="error" class="alert alert-danger silpa-hide"></div>
 <div id="result"></div>
 
 {% endblock %}
