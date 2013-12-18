@@ -1,51 +1,61 @@
 {% extends "silpa.html" %}
+
 {% block modulescript %}
 <script>
-  $(document).ready(function() {
-  $("form").submit(function(event){
-event.preventDefault();
-  dosort();
-  }
-  );
-  });
+$(document).ready(function() {
+    $("form").submit(function(event){
+        event.preventDefault();
+        var text= $("textarea[name=input_text]").val();
+            jsonRequest = {
+                method:  "ucasort.sort",
+                params: [text],
+                id: ""
+            },
+            id_progress = $("#progress"),
+            id_error = $("#error"),
+            id_result = $("#result");
 
-  function dosort()
-  {
- var text= $("textarea[name=input_text]").val();
-  var jsonRequest = {
-  "method" :  "ucasort.sort",
-  "params" : [text],
-  "id" : ""
-  };
-  $.ajax({
-  type: "POST",
-  contentType: "application/json; charset=utf-8",
-  url: "JSONRPC",
-  data: JSON.stringify(jsonRequest),
-  dataType: "json",
-  beforeSend:function(){
-  $("#progress").html("Please wait...").show();
-  $("#result").hide();
-  $("#error").hide();
+        if(text !== "") {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "JSONRPC",
+                data: JSON.stringify(jsonRequest),
+                dataType: "json",
+                beforeSend:function(){
+                    id_progress.html("Please wait...").show();
+                    id_result.hide();
+                    id_error.hide();
+                },
+                success: function(msg) {
+                    id_progress.hide();
+                    var resultobj =  msg.result,
+                        silparesult = resultobj.SILPA,
+                        ucaresult = resultobj.UCA,
+                        output = $('<table>').
+                            addClass('table table-bordered').
+                            append($('<th>').text('UCA Result')).
+                            append($('<th>').text('Modified UCA Result'));
 
-  },
-  success: function(msg) {
-  var resultobj =  msg.result;
-  $('#progress').hide();
-  $('#result').html("<table id='sortedtable' class='table table-stripped table-bordered '><tr><th>UCA Result</th><th>Modified UCA Result</th></tr></table>").show();
-  var silparesult = resultobj['SILPA'];
-  var ucaresult = resultobj['UCA'];
-  $.each(silparesult,function(index, item)
-  {
-  $('#sortedtable tr:last').after("<tr><td>" + ucaresult[index] +"</td><td>" + silparesult[index] +"</td></tr>" );
-  });
-  },
-  error: function(msg) {$("#progress").hide();
-  $("#error").html("Something went wrong.....").show()
-  }
-  });
-  }
-
+                    $.each(silparesult, function(index, item) {
+                        output.append($('<tr>')
+                          .append($('<td>').text(ucaresult[index]))
+                          .append($('<td>').text(item))
+                        );
+                    });
+                    id_result.html(output).show();
+                },
+                error: function(msg) {
+                    id_progress.hide();
+                    id_error.html("Something went wrong.....").show()
+                }
+            });
+        } else {
+            id_result.hide();
+            id_error.html("Enter text").show()
+        }
+    });
+});
 </script>
 {% endblock %}
 
@@ -84,6 +94,6 @@ modified version of
 <div id="successmessage" class="alert alert-success hide"></div>
 <div id="errormessage" class="alert alert-error hide"></div>
 </div>
-<div id="result" class="hide"></div>
+<div id="result"></div>
 
 {% endblock %}
