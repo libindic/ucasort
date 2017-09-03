@@ -18,24 +18,33 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 import os
-from silpa_common import *
 from pyuca import Collator
+
+
 class Sort:
     def __init__(self):
-        self.silpacollator = Collator(os.path.join(os.path.dirname(__file__), "allkeys-silpa-6.0.0.txt"))
-        self.ucacollator = Collator(os.path.join(os.path.dirname(__file__), "allkeys-6.0.0.txt"))
+        self.silpacollator = Collator(
+            os.path.join(
+                os.path.dirname(__file__),
+                "allkeys-silpa-6.0.0.txt"))
+        self.ucacollator = Collator(
+            os.path.join(
+                os.path.dirname(__file__),
+                "allkeys-6.0.0.txt"))
 
     def sort(self, text):
         words = text.split()
-        sorted_words= {}
+        sorted_words = {}
         sorted_words['SILPA'] = sorted(words, key=self.silpacollator.sort_key)
         sorted_words['UCA'] = sorted(words, key=self.ucacollator.sort_key)
         return sorted_words
 
     def get_module_name(self):
         return "Sort"
+
     def get_info(self):
-        return  "Sorts a set of words linguistically."
+        return "Sorts a set of words linguistically."
+
 
 def getInstance():
     return Sort()
